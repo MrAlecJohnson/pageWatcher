@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>See when Gov's Brexit pages last changed</title>
+
+
+  <link rel='stylesheet' href='https://www.citizensadvice.org.uk/static/build/css/site.css?_ffc=5248468199667387904'>
+<link rel='stylesheet' href='https://unpkg.com/@citizensadvice/cads-system@latest/build/cads.system.css'>
+
+      <link rel="stylesheet" href="css/style.css">
+
+
+</head>
+
+<body>
+
+  <header class="c-global-header">
+  <div class="c-wrap">
+    <div class="c-global-header__product-title">
+      <img src="https://citizensadvice.github.io/cads/images/citizens_advice_logo.svg" alt="Citizens Advice logo">
+    </div>
+  </div>
+</header>
+
+<div class="c-wrap">
+  <div class="o-grid">
+    <div class="o-grid__unit o-grid__unit--t-2-3">
+ <div class="title">
+        <h1 id="RootPlaceHolder_RootPlaceHolder_H1_top" class="title__heading js-ref">
+
+            <span class="title__title">See when Gov's Brexit pages last changed</span>
+        </h1>
+    </div>
+
+    <div class="articleContent">
+      <table>
+        <tbody>
+          <tr>
+            <th>Page</th>
+            <th>Last updated</th>
+          </tr>
+        {% for row in pageTable %}
+        <tr>
+          <td><a href = {{row.url}} target = "_blank">{{row.name}}</a></td>
+          <td>{{row.date}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+</div>
+</div>
+</div>
+</div>
+</body>
+
+
+
+</html>
