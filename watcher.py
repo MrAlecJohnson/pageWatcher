@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, date
 import requests
 import json
 
@@ -14,30 +14,40 @@ pageList = ["https://www.gov.uk/settled-status-eu-citizens-families",
             "https://www.gov.uk/settled-status-eu-citizens-families/settled-status-less-than-5-years",
             "https://www.gov.uk/settled-status-eu-citizens-families/after-youve-applied"]
 
-
-# %%
-
 def getContent(url):
     address = requests.get(url)
     html = address.text
     soup = BeautifulSoup(html, 'lxml') 
-    title = soup.title.text
     page = soup.main.div.find_all(class_ = ["column-two-thirds", "govuk-grid-column-two-thirds"])[1]
-    part = page.h1.text
-    content = page.div.text
-    return {'url': url, 'heading': part, 'content': content}
+    part = page.h1.text.replace('\n\n','\n')
+    content = page.div.text.strip()
+    return {'url': url, 'heading': part, 'content': content.strip(), 'date': date.today()}
+
+def start(file, pagelist):
+    current = []
+    for url in pagelist: 
+        content = getContent(url)
+        current.append(content)
+    
+    with open(file, "w") as f:
+        json.dump(current, f, default = str)
+
+def update(file, pagelist):
+    current = []
+    for url in pagelist: 
+        content = getContent(url)
+        current.append(content)    
+    
+    with open(file, "r") as f:
+        previous = json.load(f)
+    
+    for i in range(len(current)):
+        if current[i]['content'] != previous[i]['content']:
+            previous[i] = current[i]
+            
+    with open(file, "w") as f:
+        json.dump(previous, f, default = str)
 
 # %%
-    
-current = []
-for url in pageList: 
-    content = getContent(url)
-    current.append(content)
-    
-"""with open("current.json", "w") as write_file:
-    json.dump(current, write_file)"""
 
-previous = 
-        
-#%%
-        
+    
