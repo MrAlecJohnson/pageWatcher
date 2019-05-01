@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from datetime import datetime, date
+from datetime import date
 import requests
 import json
 import flask
@@ -25,7 +25,11 @@ def getContent(url):
     page = soup.main.div.find_all(class_ = ["column-two-thirds", "govuk-grid-column-two-thirds"])[1]
     part = page.h1.text.replace('\n\n','\n')
     content = page.div.text.strip()
-    return {'url': url, 'heading': part, 'content': content.strip(), 'date': str(date.today())}
+    return {'url': url, 
+            'heading': part, 
+            'content': content.strip(), 
+            'date': str(date.today()), 
+            'dateStr': str(date.today().strftime('%-d %B %Y'))}
 
 def start(file, pagelist):
     """When running for first time, create json of current content"""
@@ -60,10 +64,16 @@ def update(file, pagelist):
 
 app = flask.Flask(__name__)
 
-# This tells the html template to ask the API for values for its variables
+start('content.json', pageList)
+
 @app.route('/index', methods = ["GET"])
 def index():
+    with open('content.json', "r") as f:
+        table = json.load(f)
+
     return flask.render_template('watcher.html',
-                                 pageTable = previous
+                                 pageTable = table)
                                  
+if __name__ == '__main__':
+    app.run(debug = True, port = 5001)
 
