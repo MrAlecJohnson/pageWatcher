@@ -1,1 +1,1 @@
-web: gunicorn page-watcher:app
+web: gunicorn watcher:app
